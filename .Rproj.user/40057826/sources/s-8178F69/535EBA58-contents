@@ -8,9 +8,9 @@ corr <- function(directory, threshold = 0){
     for(file in files){
         opened_file <- read.csv(file) 
         complete_cases <- complete.cases(opened_file) # boolean array of non-null values
-        observed_cases_count <- table(complete_cases)[['TRUE']] # get number of complete cases, only these should be used 
+        observed_cases_count <- sum(complete.cases(opened_file)) # get number of complete cases, only these should be used 
     
-        # if(dim(opened_file[complete_cases, ])[1] == 0) next
+        if(dim(opened_file[complete_cases, ])[1] == 0) next
         
         if(observed_cases_count > threshold){
             opened_file <- opened_file[complete_cases, ] # getting all non-null rows using boolean vector 
