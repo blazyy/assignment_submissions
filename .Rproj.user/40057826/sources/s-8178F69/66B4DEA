@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1582716345576.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "66B4DEA",
+    "lastKnownWriteTime" : 1582718459,
+    "last_content_update" : 1582718459331,
+    "path" : "Z:/Whirldata/Coursera Data Science Course/R Projects/assignment_submissions/R Programming Week 2/pollutant_data_summary.Rmd",
+    "project_path" : "R Programming Week 2/pollutant_data_summary.Rmd",
+    "properties" : {
+        "cursorPosition" : "38,0",
+        "scrollLine" : "9",
+        "tempName" : "Untitled2"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
