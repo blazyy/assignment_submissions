@@ -17,19 +17,27 @@ best <- function(state, outcome) {
 
     else
         col_name = "Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia"
-        
-    # as.vector(t(states[col_name])) is needed because indexing using [] returned dataframes which I need to convert to a vector to use.
-    # t() converts a dataframe into a matrix and as.vector() does as the name implies/
-    # as.numeric because sorting needs to be done
     
-    # WARNING: DOES NOT WORK FOR best("MD", "pneumonia")
-    # Although works with best("TX", "heart attack") and best("TX", "heart failure") 
     
-    states <- outcome_df[outcome_df$State == state, ]
-    lowest_death_rate <- sort(as.numeric(as.vector(t(states[col_name]))))[1]
-    all_death_rates <- as.vector(t(states[col_name]))
-    hospitals <- states[all_death_rates == lowest_death_rate, ]['Hospital.Name']
-    #hospitals <- hospitals[complete.cases(hospitals), ]['Hospital.Name'] 
+    # Getting only the requires states
+    states <- outcome_df[outcome_df['State'] == state, ]
+    
+    # Need to convert to numeric as the column is of type character. When sorting, "11.7" will be greater than "9.7" which we don't want.
+    # Will show warnings as the "Not Available" values are coerced to NAs.
+    # as.character() to coerce number back to a character since our original column contains characters
+    # todo: indexing the returned sorted vector by [1] turns 12.0 to 12. Fix this
+    
+    lowest_mortality_rate <- as.character(sort(as.numeric(states[, col_name]))[1])
+    
+    hospital_names <- states[states[col_name] == lowest_mortality_rate, ]$Hospital.Name
 
-    hospitals
+    hospital_names
 }
+
+best("TX", "heart attack") 
+best("TX", "heart failure") 
+best("MD", "pneumonia") 
+
+#  "CYPRESS FAIRBANKS MEDICAL CENTER"
+# "FORT DUNCAN MEDICAL CENTER"
+# "JOHNS HOPKINS HOSPITAL, THE"
