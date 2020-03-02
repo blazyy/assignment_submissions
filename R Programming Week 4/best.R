@@ -18,26 +18,21 @@ best <- function(state, outcome) {
     else
         col_name = "Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia"
     
-    
-    # Getting only the requires states
+    # Getting only the states that we want.
     states <- outcome_df[outcome_df['State'] == state, ]
-    
     # Need to convert to numeric as the column is of type character. When sorting, "11.7" will be greater than "9.7" which we don't want.
-    # Will show warnings as the "Not Available" values are coerced to NAs.
-    # as.character() to coerce number back to a character since our original column contains characters
-    # todo: indexing the returned sorted vector by [1] turns 12.0 to 12. Fix this
-    
+    # Will show warnings as the "Not Available" values are coerced to NAs. Ignore. 
+    # as.character() to coerce number back to a character since our original column is of type character.
     lowest_mortality_rate <- as.character(sort(as.numeric(states[, col_name]))[1])
-    
-    hospital_names <- states[states[col_name] == lowest_mortality_rate, ]$Hospital.Name
-
+    # "12.0" gets converted to "12" when indexing using [1], so need to add ".0" as decimal place using %.1f format in sprintf()
+    modded_lmr <- sprintf('%.1f', as.numeric(lowest_mortality_rate))
+    # Getting the name of the hospital with the lowest mortality rate. 
+    hospital_names <- states[states[col_name] == modded_lmr, ]$Hospital.Name
     hospital_names
 }
 
-best("TX", "heart attack") 
-best("TX", "heart failure") 
-best("MD", "pneumonia") 
+best("TX", "heart attack")  # "CYPRESS FAIRBANKS MEDICAL CENTER"
+best("TX", "heart failure") # "FORT DUNCAN MEDICAL CENTER"
+best("MD", "heart attack")  # "JOHNS HOPKINS HOSPITAL, THE"
+best("MD", "pneumonia")     # "GREATER BALTIMORE MEDICAL CENTER"
 
-#  "CYPRESS FAIRBANKS MEDICAL CENTER"
-# "FORT DUNCAN MEDICAL CENTER"
-# "JOHNS HOPKINS HOSPITAL, THE"
