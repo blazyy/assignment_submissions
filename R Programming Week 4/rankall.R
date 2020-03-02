@@ -19,7 +19,7 @@ rankall <- function(outcome, num = "best") {
     # Convert outcome column to numeric and remove rows with NAs in this column
     outcome_df[, col_name] <- as.numeric(outcome_df[, col_name])
     outcome_df <- outcome_df[!is.na(outcome_df[, col_name]), ]
-
+    
     # Creating empty dataframe which we will fill and return later    
     return_df <- data.frame('hospital' = character(0), 'state' = character(0), stringsAsFactors = FALSE)
     
@@ -41,7 +41,7 @@ rankall <- function(outcome, num = "best") {
             hospital <- NA
         else
             hospital <- ordered_hospitals_in_state[num, 'Hospital.Name']
-
+        
         # Return dataframe appended with states and their ranked hospitals
         return_df[nrow(return_df) + 1, ] <- c(hospital, name)
     }

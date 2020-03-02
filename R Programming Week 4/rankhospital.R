@@ -18,6 +18,9 @@ rankhospital <- function(state, outcome, num = "best") {
     else
         col_name = "Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia"
     
+    # Subsetting the 3 columns that we need out of the 46 total columns.
+    outcome_df <- outcome_df[, c("Hospital.Name", "State", col_name)]
+    
     # Getting required states, converting to numeric, and removing NAs
     states <- outcome_df[outcome_df['State'] == state, ]
     states[, col_name] <- as.numeric(states[, col_name])
@@ -36,7 +39,7 @@ rankhospital <- function(state, outcome, num = "best") {
     # Getting nth hospital from ordered states. This is the rank.
     hospitals <- ordered_states[, 'Hospital.Name'][num]
     hospitals
-
+    
 }
 
 rankhospital("TX", "heart failure", 4)      # "DETAR HOSPITAL NAVARRO
