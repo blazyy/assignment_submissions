@@ -1,7 +1,6 @@
 best <- function(state, outcome) {
 
     outcome_df <- read.csv("outcome-of-care-measures.csv", colClasses = "character")
-    # if(dim(table(outcome_df$State == 'AZ')) == 1) 
     
     if(!state %in% outcome_df$State)
         stop('invalid state')
