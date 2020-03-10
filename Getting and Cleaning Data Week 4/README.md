@@ -43,5 +43,4 @@ grouped_by_activity <- group_by(mean_and_std_dataset, type_of_activity)
 avg_by_activity <- summarize_each(grouped_by_activity, mean)
 ```
 
-![avg-by-activity](/averaged_by_activity.jpg)
-
+![avg-by-activity](Getting%20and%20Cleaning%20Data%20Week%204/averaged_by_activity.jpg)
