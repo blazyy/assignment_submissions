@@ -121,6 +121,6 @@ mean_and_std_dataset <- dataset[, c(1, mean_and_std_cols, ncol(dataset))]
 4) Group this new dataset by activity and subject and summarize each variable using the mean so that in the tidy dataset, there are only 180 rows, 6 activities x 30 subjects.
 
 ```r
-grouped_by_activity <- group_by(mean_and_std_dataset, type_of_activity)
+grouped_by_activity <- group_by(mean_and_std_dataset, type_of_activity, subject_number)
 avg_by_activity <- summarize_each(grouped_by_activity, mean)
 ```
