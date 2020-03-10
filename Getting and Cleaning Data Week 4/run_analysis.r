@@ -36,6 +36,7 @@ mean_and_std_dataset <- dataset[, c(1, mean_and_std_cols, ncol(dataset))]
 
 #--------------------------# Creating tidy data set which shows averave of each variable grouped by the activity #--------------------------#
 
-grouped_by_activity <- group_by(mean_and_std_dataset, type_of_activity)
+grouped_by_activity <- group_by(mean_and_std_dataset, type_of_activity, subject_number)
 avg_by_activity <- summarize_each(grouped_by_activity, mean)
+dim(avg_by_activity) # The tidy dataset, with dimensions 190 x 81. 180 since there are 30 subjects with 6 activites each. (30 * 6)
 
