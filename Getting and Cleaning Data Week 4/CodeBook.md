@@ -65,8 +65,7 @@ Additional vectors obtained by averaging the signals in a signal window sample. 
 * tBodyGyroMean
 * tBodyGyroJerkMean
 
-For each record it is provided:
-======================================
+## For each record: 
 
 - Triaxial acceleration from the accelerometer (total acceleration) and the estimated body acceleration.
 - Triaxial Angular velocity from the gyroscope. 
@@ -74,8 +73,8 @@ For each record it is provided:
 - Its activity label. 
 - An identifier of the subject who carried out the experiment.
 
-Notes: 
-======
+## Notes
+
 - Features are normalized and bounded within [-1,1].
 - Each feature vector is a row on the text file.
 
@@ -125,5 +124,3 @@ mean_and_std_dataset <- dataset[, c(1, mean_and_std_cols, ncol(dataset))]
 grouped_by_activity <- group_by(mean_and_std_dataset, type_of_activity)
 avg_by_activity <- summarize_each(grouped_by_activity, mean)
 ```
-
-[avg-by-activity](/averaged_by_activity.jpg)
