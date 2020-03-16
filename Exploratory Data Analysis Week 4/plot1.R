@@ -21,6 +21,6 @@ nei_by_year <- group_by(nei, year) %>% summarize(total_emissions = sum(Emissions
 png('plot1.png')
 par(mar = c(5, 6, 5, 4))
 plot(nei_by_year, type = 'l', xlab = 'Year', ylab = 'Total Emissions in Tons', xaxt = 'n')
-title(main = 'Total Emissions in the United States from 1999 to 2008')
+title(main = expression("Total PM"[2.5]*" Emissions in the U.S., 1999-2008"))
 axis(1, at = c(1999, 2002, 2005, 2008))
 dev.off()

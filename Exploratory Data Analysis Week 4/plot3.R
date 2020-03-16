@@ -24,7 +24,7 @@ nei_by_type <- filter(nei, fips == '24510') %>%
 png('plot3.png')
 ggplot(nei_by_type, aes(year, total_emissions)) + 
     geom_line(aes(color = type), lwd = 1.25) +
-    labs(title = 'Emissions in Baltimore City, Maryland, from 1999-2008') +
+    labs(title = expression("PM"[2.5]*" Emissions in Baltimore City, Maryland, 1999-2008")) +
     labs(x = 'Year', y = 'Total Emissions in Tons') +
     theme(plot.margin = unit(c(1, 1, 1, 1), 'cm'), plot.title = element_text(hjust = 0.5))
 dev.off()

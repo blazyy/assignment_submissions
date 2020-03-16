@@ -31,6 +31,6 @@ nei_coal <- filter(nei, SCC %in% scc_codes_coal[[1]]) %>%
 png('plot4.png')
 ggplot(nei_coal, aes(year, total_emissions)) + 
     geom_line() + 
-    labs(x = 'Year', y = 'Total Coal Emissions in Tons', title = 'Coal combustion emissions in the U.S. from 1999-2008') + 
+    labs(x = 'Year', y = 'Total Coal Emissions in Tons', title = expression("PM"[2.5]*" Coal Combustion Emissions in the U.S., 1999-2008"))+
     theme(plot.margin = unit(c(1, 1, 1, 1), 'cm'), plot.title = element_text(hjust = 0.5))
 dev.off()

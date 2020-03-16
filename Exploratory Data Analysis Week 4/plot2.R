@@ -23,6 +23,6 @@ nei_baltimore <- filter(nei, fips == '24510') %>%
 png('plot2.png')
 par(mar = c(5, 6, 5, 5))
 plot(nei_baltimore, type= 'line', xlab = 'Year', ylab = 'Total Emissions in Tons', xaxt = 'n')
-title(main = 'Total Emissions in Baltimore City, Maryland from 1999 to 2008')
+title(main = expression("Total PM"[2.5]*" Emissions in Baltimore City, Maryland, 1999-2008"))
 axis(1, at = c(1999, 2002, 2005, 2008))
 dev.off()

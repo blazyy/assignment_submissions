@@ -36,6 +36,6 @@ neibc[neibc$county== '24510', ]$county<- 'Baltimore City'
 png('plot6.png')
 ggplot(neibc, aes(year, total_vehicle_emissions)) + 
     geom_line(aes(color = county), lwd = 1.25) + 
-    labs(x = 'Year', y = 'Total Vehicle Emissions in Tons', title = 'Vehicle Emissions in Baltimore City and Los Angeles from 1999-2008') + 
+    labs(x = 'Year', y = 'Total Vehicle Emissions in Tons', title = expression("PM"[2.5]*" Vehicle Emissions in Baltimore City and Los Angeles, 1999-2008")) + 
     theme(plot.margin = unit(c(1.5, 1.5, 1.5, 3), 'cm'), plot.title = element_text(hjust = 0.5))
 dev.off()

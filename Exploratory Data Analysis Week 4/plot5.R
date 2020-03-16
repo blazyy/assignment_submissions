@@ -31,6 +31,6 @@ nei_baltimore_vehicles <- filter(nei, fips == '24510' & SCC %in% scc_codes_vehic
 png('plot5.png')
 ggplot(nei_baltimore_vehicles, aes(year, total_vehicle_emissions)) + 
     geom_line() +
-    labs(x = 'Year', y = 'Total Vehicle Emissions in Tons', title = 'Motor Vehicle Emissions in Baltimore City, Maryland, from 1999-2008') +
+    labs(x = 'Year', y = 'Total Vehicle Emissions in Tons', title = expression("PM"[2.5]*" Motor Vehicle Emissions in Baltimore City, Maryland, 1999-2008")) +
     theme(plot.margin = unit(c(1, 1, 1, 1), 'cm'), plot.title = element_text(hjust = 0.5))
 dev.off()
