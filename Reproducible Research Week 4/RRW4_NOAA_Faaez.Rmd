@@ -1,0 +1,145 @@
+---
+title: "Which Weather Event is the Most Devastating?"
+author: "Faaez Razeen"
+date: "3/24/2020"
+output: html_document
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Synopsis
+
+The NOAA (National Oceanic and Atmospheric Administration) dataset is used which lists various details about various weather events- i.e. when and where they occur, and the damage that they leave in their wake. In this article, two questions were mainly studied upon: which events affect the population health the most and which events cause the most economic damage. After grouping together the data by their type and summarizing various information, tornadoes were found be the most devastating- both in terms of effect on the population and the economic damage caused. 
+
+# Data Processing
+
+## Importing Required Libraries
+```{r import, results = 'hide'}
+library(dplyr)
+library(ggplot2)
+```
+
+## Downloading and Reading Data
+```{r data_processing, cache = TRUE}
+if(!dir.exists('data')){dir.create('data')}
+if(!file.exists('data/StormData.csv.bz2')){
+    download.file('https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2', 'data/StormData.csv.bz2')
+}
+
+storm <- read.csv('data/StormData.csv.bz2', nrows = 902300, stringsAsFactors = FALSE)
+```
+
+### Summary Statistics
+```{r summary_statistics, cache = TRUE}
+dim(storm)
+str(storm)
+summary(storm)
+```
+
+## Questions to answer: 
+1) **Across the United States, which types of events (as indicated in the EVTYPE variable) are most harmful with respect to population health?**
+
+Two variables which refer to population 'health' are the number of fatalities and injuries. To see the effect of event type which is most harmful to the population health, I'll group by the event type and create a new variable which is the sum of the number of fatalities and the number of injuries. We can visualize this with a barplot:
+
+```{r fatalities, cache = TRUE}
+fatalities <- 
+    group_by(storm, EVTYPE) %>%
+    summarize(FATALITIES = sum(FATALITIES, na.rm = TRUE)) %>%
+    arrange(desc(FATALITIES)) %>%
+    select(EVTYPE, FATALITIES)
+
+head(fatalities)
+```
+
+```{r injuries, cache = TRUE}
+injuries <- 
+    group_by(storm, EVTYPE) %>%
+    summarize(INJURIES = sum(INJURIES, na.rm = TRUE)) %>%
+    arrange(desc(INJURIES)) %>%
+    select(EVTYPE, INJURIES)
+
+head(injuries)
+```
+
+2) **Across the United States, which types of events have the greatest economic consequences?**
+
+For economic consequence, we take two variables into account: the property damage and the crop damage. These values are in dollars, and I'll be combining both to get the overall damage to the economy.
+
+The values for property damage and economic damage are not to be taken as is. They have another column called PROPDMGEXP and CROPDMGEXP, which are the exponents to which these numbers must be raised to. 
+
+```{r exponents_table}
+table(storm$PROPDMGEXP)
+```
+
+First, I'll combine both and create a new column. Using `gsub()`, I'll replace these exponents and symbols with their appropriate values.
+
+```{r combining_exponent_column, cache = TRUE}
+storm$PROPDMG <- paste(storm$PROPDMG, storm$PROPDMGEXP, sep = '')
+storm$PROPDMG <- gsub('[kK4]$', '000', storm$PROPDMG)
+storm$PROPDMG <- gsub('[mM6]$', '000000', storm$PROPDMG)
+storm$PROPDMG <- gsub('[bB]', '000000000', storm$PROPDMG)
+storm$PROPDMG <- gsub('2$', '0', storm$PROPDMG)
+storm$PROPDMG <- gsub('[hH3]$', '00', storm$PROPDMG)
+storm$PROPDMG <- gsub('5$', '0000', storm$PROPDMG)
+storm$PROPDMG <- gsub('7$', '0000000', storm$PROPDMG)
+storm$PROPDMG <- gsub('8$', '00000000', storm$PROPDMG)
+storm$PROPDMG <- gsub('[1-?+]$', '', storm$PROPDMG)
+storm$PROPDMG <- as.numeric(storm$PROPDMG)
+
+storm$CROPDMG <- paste(storm$CROPDMG, storm$CROPDMGEXP, sep = '')
+storm$CROPDMG <- gsub('[kK]$', '000', storm$CROPDMG)
+storm$CROPDMG <- gsub('[mM]$', '000000', storm$CROPDMG)
+storm$CROPDMG <- gsub('[bB]', '000000000', storm$CROPDMG)
+storm$CROPDMG <- gsub('?$', '', storm$CROPDMG)
+storm$CROPDMG <- gsub('2$', '0', storm$CROPDMG)
+storm$CROPDMG <- as.numeric(storm$CROPDMG)
+```
+
+```{r economic_consequences}
+prop_and_crop <-
+    group_by(storm, EVTYPE) %>%
+    summarize(PROPDMG = sum(PROPDMG, na.rm = TRUE), CROPDMG = sum(CROPDMG, na.rm = TRUE)) %>%
+    mutate(overall_economic_damage = PROPDMG + CROPDMG) %>%
+    arrange(desc(overall_economic_damage)) %>%
+    select(EVTYPE, PROPDMG, CROPDMG, overall_economic_damage)
+
+head(prop_and_crop)
+```
+
+Immediately we can see that floods cause the most economic damage, almost 3 times as much as the next most damaging event, tornadoes.
+
+# Results
+```{r results1}
+ggplot(head(injuries, 5), aes(EVTYPE, INJURIES, fill = EVTYPE)) + 
+geom_bar(stat = 'identity') + 
+labs(x = '', y = 'Total People Harmed', title = 'Events which cause the highest injuries') + 
+theme(axis.text.x = element_text(angle = 30, hjust = 1)) + 
+theme(legend.title=element_blank()) +
+theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(head(fatalities, 5), aes(EVTYPE, FATALITIES, fill = EVTYPE)) + 
+geom_bar(stat = 'identity') + 
+labs(x = '', y = 'Total People Killed', title = 'Events which cause the highest deaths') + 
+theme(axis.text.x = element_text(angle = 30, hjust = 1)) + 
+theme(legend.title=element_blank()) +
+theme(plot.title = element_text(hjust = 0.5))
+```
+
+Out of all events, we can clearly see that tornadoes cause the most harm to population health. The difference is so huge that the other events seem meek in comparison. The next event which causes the most harm is excessive heat.
+
+```{r results2}
+ggplot(head(prop_and_crop, 5), aes(EVTYPE, overall_economic_damage, fill = EVTYPE)) + 
+geom_bar(stat = 'identity') + 
+labs(x = '', y = 'Overall Economic Damage ($)', title = 'Events which cause the most economic damage in $') +
+theme(axis.text.x = element_text(angle = 30, hjust = 1)) + 
+theme(legend.title=element_blank()) +
+theme(plot.title = element_text(hjust = 0.5))
+```
+
+Looking at the bar graphs, we can see that floods are the most devastating. They also have the most economic consequences, with the overall damage caused being twice as much as the next most devastating event, which are tornados. This is followed by typhoons, hurricanes, hails, and then flash floods respectively. 
+
+
+
+
+
